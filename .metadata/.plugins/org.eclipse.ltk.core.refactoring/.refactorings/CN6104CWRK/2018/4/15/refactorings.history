@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;selectModeGUI.java&apos; to &apos;SelectModeGUI.java&apos;&#x0A;- Original project: &apos;CN6104CWRK&apos;&#x0A;- Original element: &apos;selectModeGUI.java&apos;&#x0A;- Renamed element: &apos;SelectModeGUI.java&apos;" description="Rename compilation unit &apos;selectModeGUI.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src&lt;{selectModeGUI.java" name="SelectModeGUI.java" references="false" stamp="1523380537883" version="1.0"/>
+</session>

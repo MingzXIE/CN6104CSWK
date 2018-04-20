@@ -1,0 +1,121 @@
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.net.*;
+import java.io.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+
+
+public class ClientGUI {
+	private static JFrame quizFrame;
+	private static JSplitPane hSplitPane;
+	private static JSplitPane vLeftSplitPane;
+	private static JSplitPane vRightSplitPane;
+	private static JSplitPane vLeftBottomSplitPane;
+	private static JScrollPane quizPanel;
+	private static JScrollPane answerPanel;
+	private static JScrollPane resultPanel;
+	private static JPanel sendPanel;
+	private static JPanel functionPanel;
+	private static JTextArea quizArea;
+	private static JTextArea answerArea;
+	
+	private static Socket clientSocket;
+	private static BufferedReader in;
+	private static PrintWriter out;
+	
+	public ClientGUI(Socket s) throws IOException {
+		clientSocket = s;
+	}
+	
+	public static void startGUI(){
+		quizFrame = new JFrame("On-line Quiz Game");
+		quizFrame.setBounds(100, 100, 700, 700);
+//		quizFrame.addWindowListener(new MyWindowListener());
+		
+
+		hSplitPane = new JSplitPane();
+		hSplitPane.setDividerLocation(500);
+		hSplitPane.setDividerSize(0);
+		hSplitPane.setContinuousLayout(true);
+
+		vLeftSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		vLeftSplitPane.setDividerLocation(380);
+		vLeftSplitPane.setDividerSize(0);
+
+		vLeftBottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		vLeftBottomSplitPane.setDividerLocation(50);
+		vLeftBottomSplitPane.setDividerSize(0);
+
+		vRightSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		vRightSplitPane.setDividerLocation(590);
+		vRightSplitPane.setDividerSize(0);
+		vRightSplitPane.setContinuousLayout(true);
+		vRightSplitPane.setOneTouchExpandable(true);
+
+		quizArea = new JTextArea();
+		quizArea.setSize(500, 380);
+		quizArea.setEditable(false);
+		quizPanel = new JScrollPane(quizArea);
+		quizPanel.setSize(500, 380);
+		quizPanel.setBackground(Color.PINK);
+
+		answerArea = new JTextArea();
+		answerArea.setSize(500, 270);
+		answerArea.setLineWrap(true);
+		answerArea.setEditable(true);
+		answerPanel = new JScrollPane(answerArea);
+		answerPanel.setSize(500, 300);
+
+		resultPanel = new JScrollPane();
+		resultPanel.setLayout(null);
+		resultPanel.setBounds(500, 0, 200, 590);
+		resultPanel.setBackground(Color.WHITE);
+
+		
+		sendPanel = new JPanel();
+		sendPanel.setLayout(null);
+		sendPanel.setBounds(500, 590, 200, 90);
+		JButton sendButton = new JButton("send");
+		sendButton.setBounds(0, 0, 200, 90);
+		sendButton.setActionCommand("send");
+//		sendButton.addActionListener(new ButtonClickListener());
+		sendPanel.add(sendButton);
+
+		functionPanel = new JPanel();
+		functionPanel.setLayout(null);
+		functionPanel.setBounds(0, 400, 500, 50);
+		functionPanel.setBackground(new Color(173, 216, 230));
+
+		vLeftBottomSplitPane.setTopComponent(functionPanel);
+		vLeftBottomSplitPane.setBottomComponent(answerPanel);
+
+		vLeftSplitPane.setTopComponent(quizPanel);
+		vLeftSplitPane.setBottomComponent(vLeftBottomSplitPane);
+		vRightSplitPane.setTopComponent(resultPanel);
+		vRightSplitPane.setBottomComponent(sendPanel);
+
+		hSplitPane.setLeftComponent(vLeftSplitPane);
+		hSplitPane.setRightComponent(vRightSplitPane);
+
+		quizFrame.add(hSplitPane, BorderLayout.CENTER);
+		quizFrame.setVisible(true);
+	}
+	
+	
+	
+//	public static class MyWindowListener extends WindowAdapter {
+//		public void windowClosing(WindowEvent e) {
+//			super.windowClosing(e);
+//			out.println("#QUIT");
+//			System.exit(0);
+//		}
+//	}
+}

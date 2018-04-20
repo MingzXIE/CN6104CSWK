@@ -1,0 +1,78 @@
+import java.awt.*;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+
+public class selectModeGUI {
+	private static JFrame modeSelectionFrame;
+	
+	
+	public static void startGUI(){
+		modeSelectionFrame = new JFrame("Select Mode");
+		modeSelectionFrame.setSize(300, 300);
+		modeSelectionFrame.setLocation(300, 300);
+		modeSelectionFrame.setLayout(new GridLayout(5,1));
+		modeSelectionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JLabel menuOptions = new JLabel("Select Mode");
+		menuOptions.setFont(new Font("Monospace", 1, 27));
+		menuOptions.setForeground(Color.WHITE);
+
+		JPanel topPanel = new JPanel();
+		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		topPanel.add(menuOptions);
+		topPanel.setBackground(new Color(173, 216, 230));
+
+		JButton practiceButton = new JButton("Practice");
+		practiceButton.setPreferredSize(new Dimension(100, 30));
+		practiceButton.setFont(new Font("Monospace", 1, 17));
+		practiceButton.setActionCommand("Practice");
+		practiceButton.addActionListener(new ButtonClickListener());
+
+		JButton friendlyButton = new JButton("Friendly");
+		friendlyButton.setPreferredSize(new Dimension(100, 30));
+		friendlyButton.setFont(new Font("Monospace", 1, 17));
+		friendlyButton.setActionCommand("Frindly");
+		friendlyButton.addActionListener(new ButtonClickListener());
+		
+		JButton tournamentButton = new JButton("Friendely");
+		tournamentButton.setPreferredSize(new Dimension(100, 30));
+		tournamentButton.setFont(new Font("Monospace", 1, 17));
+		tournamentButton.setActionCommand("Register");
+		tournamentButton.addActionListener(new ButtonClickListener());
+
+		JButton quitButton = new JButton("Quit");
+		quitButton.setPreferredSize(new Dimension(100, 30));
+//		quitButton.setBackground(new Color(173, 216, 230));
+		quitButton.setFont(new Font("Monospace", 1, 17));
+//		quitButton.setForeground(Color.WHITE);
+//		quitButton.setBorder(null);
+		quitButton.setActionCommand("Quit");
+		quitButton.addActionListener(new ButtonClickListener());
+
+		JPanel loginPanel = new JPanel();
+		loginPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		loginPanel.setBackground(Color.WHITE);
+		loginPanel.add(loginButton);
+
+		JPanel registerPanel = new JPanel();
+		registerPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		registerPanel.setBackground(Color.WHITE);
+		registerPanel.add(registerButton);
+
+		JPanel quitPanel = new JPanel();
+		quitPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		quitPanel.setBackground(Color.WHITE);
+		quitPanel.add(quitButton);
+		
+		modeSelectionFrame.add(topPanel);
+		modeSelectionFrame.add(loginPanel);
+		modeSelectionFrame.add(registerPanel);
+		modeSelectionFrame.add(quitPanel);
+		modeSelectionFrame.setVisible(true);
+
+	}
+}

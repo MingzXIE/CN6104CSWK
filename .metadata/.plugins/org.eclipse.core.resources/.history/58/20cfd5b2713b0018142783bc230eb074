@@ -1,0 +1,36 @@
+import java.io.*;
+import java.net.*;
+import java.util.ArrayList;
+
+public class MultiThreadChatServer {  //run server
+
+	public static void main(String[] args) {
+		ServerSocket serverSocket = null;
+		try {
+			serverSocket = new ServerSocket(2018);
+			shareInformation si = new shareInformation();
+			while (true) {
+				System.out.println("Waiting for connection.....");
+				Socket clientConnection = serverSocket.accept();
+				si.addClient();
+				System.out.println("Connection successful!");
+				Thread it = new inputThread(clientConnection, si);
+				Thread ot = new outputThread(clientConnection, si);
+				it.start();
+				ot.start();
+			}
+
+		} catch (IOException e) {
+			System.out.println(e.toString());
+		} finally {
+			try {
+				serverSocket.close();
+			} catch (IOException e) {
+				System.out.println(e.toString());
+			}
+		}
+		
+
+	}
+
+}

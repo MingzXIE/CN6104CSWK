@@ -1,0 +1,264 @@
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.net.*;
+import java.io.*;
+
+import javax.swing.*;
+
+import LoginGUI.ButtonClickListener;
+
+public class ClientGUI {
+	private static JFrame quizFrame;
+	private static JPanel quizPanel;
+	private static JPanel modePanel;
+	private static JTabbedPane answerPanel;
+	private static JLabel modeLabel;
+	private static JTextArea quizArea;
+	private static JPanel instructionPanel;
+	private static JPanel safeModePanel;
+	private static JPanel quickModePanel;
+	private static JTextArea instructionArea;
+
+	private static JRadioButton saButton;
+	private static JRadioButton sbButton;
+	private static JRadioButton scButton;
+	private static JRadioButton sdButton;
+	private static JRadioButton seButton;
+	private static ButtonGroup sGroup;
+	private static JButton sSend;
+
+	private static JButton qaButton;
+	private static JButton qbButton;
+	private static JButton qcButton;
+	private static JButton qdButton;
+	private static JButton qeButton;
+
+	private static String mode;
+	final private static String pPrefix = "#P";
+	final private static String fPrefix = "#F";
+	final private static String tPrefix = "#T";
+	private static BufferedReader in;
+	private static PrintWriter out;
+
+	private static String instruction;
+	private static String commonInstruction = "\nInput Mode: \nIn Safe Mode, you can confirm your choice before you send the answer. In Quick Mode, you will send the answer as soon as you press the corresponding button.";
+
+	public ClientGUI(PrintWriter outIn, BufferedReader inIn, String modeIn) throws IOException {
+		out = outIn;
+		in = inIn;
+		mode = modeIn;
+		if (mode.equals("P")) {
+			instruction = "\nGame Mode:In this Mode you will receive N questions one after another and there is no timeout and no competition with other users: the final result will be sent to the you after answering the last question.";
+		}
+	}
+
+	public static void main(String[] args) {
+
+		startGUI();
+	}
+
+	public static void startGUI() {
+		quizFrame = new JFrame("On-line Quiz Game");
+		quizFrame.setBounds(100, 50, 500, 720);
+		quizFrame.addWindowListener(new MyWindowListener());
+
+		Container container = quizFrame.getLayeredPane();
+		modePanel = new JPanel();
+		modePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		modePanel.setBounds(0, 0, 500, 100);
+
+		quizPanel = new JPanel();
+		quizPanel.setLayout(null);
+		quizPanel.setBounds(0, 100, 500, 300);
+
+		answerPanel = new JTabbedPane();
+		answerPanel.setBounds(0, 400, 500, 290);
+
+		mode = "Practice Mode";
+		modeLabel = new JLabel(mode);
+		modeLabel.setBounds(0, 0, 500, 100);
+		modeLabel.setFont(new Font("Monospace", 1, 50));
+
+		quizArea = new JTextArea();
+		quizArea.setSize(500, 300);
+		quizArea.setEditable(false);
+
+		instructionPanel = new JPanel();
+		instructionPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		instructionArea = new JTextArea();
+		instructionArea.setBounds(0, 0, 480, 300);
+		instructionArea.setEditable(false);
+		instruction = "Game Mode:\nIn this Mode you will receive N questions one after another and there is no timeout and no competition with other users: the final result will be sent to the you after answering the last question.";
+		instruction += commonInstruction;
+		instructionArea.setLineWrap(true);
+		instructionArea.setWrapStyleWord(true);
+		instructionArea.setText(instruction);
+		instructionArea.setVisible(true);
+		instructionPanel.add(instructionArea);
+		instructionPanel.setBackground(Color.white);
+
+		safeModePanel = new JPanel();
+		safeModePanel.setLayout(new GridLayout(6, 1));
+		saButton = new JRadioButton("A");
+		sbButton = new JRadioButton("B");
+		scButton = new JRadioButton("C");
+		sdButton = new JRadioButton("D");
+		seButton = new JRadioButton("E");
+		sGroup = new ButtonGroup();
+		sGroup.add(saButton);
+		sGroup.add(sbButton);
+		sGroup.add(scButton);
+		sGroup.add(sdButton);
+		sGroup.add(seButton);
+		JLabel safeModeChoice = new JLabel("Your choice is: ");
+		sSend = new JButton("Confirm & Send");
+		JPanel bottomPanel = new JPanel();
+		bottomPanel.setLayout(new GridLayout(1, 2));
+		bottomPanel.add(safeModeChoice);
+		bottomPanel.add(sSend);
+		safeModePanel.add(saButton);
+		safeModePanel.add(sbButton);
+		safeModePanel.add(scButton);
+		safeModePanel.add(sdButton);
+		safeModePanel.add(seButton);
+		safeModePanel.add(bottomPanel);
+
+		quickModePanel = new JPanel();
+		quickModePanel.setLayout(new GridLayout(6, 1));
+		qaButton = new JButton("A");
+		qbButton = new JButton("B");
+		qcButton = new JButton("C");
+		qdButton = new JButton("D");
+		qeButton = new JButton("E");
+		JLabel quickModeChoice = new JLabel("Your choice is: ");
+		quickModePanel.add(qaButton);
+		quickModePanel.add(qbButton);
+		quickModePanel.add(qcButton);
+		quickModePanel.add(qdButton);
+		quickModePanel.add(qeButton);
+		qaButton.setActionCommand("qSendA");
+		qaButton.addActionListener(new ButtonClickListener());
+		qbButton.setActionCommand("qSendB");
+		qbButton.addActionListener(new ButtonClickListener());
+		qcButton.setActionCommand("qSendC");
+		qcButton.addActionListener(new ButtonClickListener());
+		qdButton.setActionCommand("qSendD");
+		qdButton.addActionListener(new ButtonClickListener());
+		qeButton.setActionCommand("qSendE");
+		qeButton.addActionListener(new ButtonClickListener());
+
+		quickModePanel.add(quickModeChoice);
+
+		modePanel.add(modeLabel);
+		quizPanel.add(quizArea);
+		answerPanel.add("Instruction", instructionPanel);
+		answerPanel.add("Safe Mode", safeModePanel);
+		answerPanel.add("Quick Mode", quickModePanel);
+
+		container.setLayout(null);
+		container.add(modePanel);
+		container.add(quizPanel);
+		container.add(answerPanel);
+
+		quizFrame.setVisible(true);
+
+	}
+
+	private static class ButtonClickListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+		String command = e.getActionCommand();
+		switch (command) {
+		case "qSendA":
+			send("A");
+			break;
+		case "qSendB":
+			send("B");
+			break;
+		case "qSendC":
+			send("C");
+			break;
+		case "qSendD":
+			send("D");
+			break;
+		case "qSendE":
+			send("E");
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	}
+
+	private static void send(String in) {
+
+		String answerToSend = in ;
+
+		switch (mode) {
+		case "P":
+			System.out.println(answerToSend);
+			out.println(pPrefix + "ANSWER" + answerToSend); // #PMODEANSWER
+			out.flush();
+			break;
+		case "F":
+			System.out.println(answerToSend);
+			out.println(fPrefix + "ANSWER" + answerToSend); // #FMODEANSWER
+			out.flush();
+			break;
+		case "T":
+			System.out.println(answerToSend);
+			out.println(tPrefix + "ANSWER" + answerToSend); // #T MODEANSWER
+			out.flush();
+			break;
+		}
+
+	}
+
+	public static void client() throws IOException {
+
+		ClientRead R = new ClientRead();
+		Thread Read = new Thread(R);
+
+		Read.start();
+
+	}
+
+	private static class ClientRead extends Thread {
+
+		public void run() {
+
+			try {
+
+				String clientReceive = in.readLine();
+				while (true) {
+
+					if (clientReceive.startsWith("#QUIZ")) {
+						// quizArea.append(clientReceive.substring(5)+"\n");
+						String modifiedReceive = clientReceive.substring(5) + "\n";
+						quizArea.append(modifiedReceive);
+
+					}
+
+					clientReceive = in.readLine();
+				}
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static class MyWindowListener extends WindowAdapter {
+		public void windowClosing(WindowEvent e) {
+			super.windowClosing(e);
+			out.println("#QUIT");
+			System.exit(0);
+		}
+	}
+
+}
